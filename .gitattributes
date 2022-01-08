@@ -1,0 +1,264 @@
+# Using Git LFS
+##   Git Large File Storage (LFS) is one of Git’s solutions to handle large files; 
+##   it replaces large files with text pointers while storing the file contents on 
+##   a remote server keeping Git operations between host and a server performant.
+##   So here I've added a whole list of file extensions for various file types I 
+##   want to be controlled by Git LFS. I tell Git that I want to filter, diff 
+##   and merge using the LFS tool and finally the -text argument tells Git that 
+##   this is not a text file, which is a strange way to tell it that it's a binary file.
+
+
+######################################################################
+# Details per file setting:
+#   text    These files should be normalized (i.e. convert CRLF to LF).
+#   binary  These files are binary and should be left untouched.
+#
+# Add diff=lfs merge=lfs to the binary files
+# Note that binary is a macro for -text -diff.
+######################################################################
+
+
+######################################################################
+# USING LARGE-FILE STORAGE
+#
+# Note: When making changes to .gitattributes, files must be un-staged 
+# and re-staged for changes to be applied:
+#
+#   git reset HEAD --
+#	git add -A
+#
+# Changes can then be verified using:
+#
+#	git lfs status | grep LFS:
+#
+######################################################################
+
+
+#####################
+# MACRO SETUP
+# 
+#   Reference: https://git-scm.com/docs/gitattributes#_using_macro_attributes
+#####################
+
+
+# Macro for Unity YAML-based asset files.
+[attr]unityyaml 		-text merge=unityyamlmerge eol=lf diff
+# Macro for all binary files that should use Git LFS.
+[attr]lfs 				-text filter=lfs diff=lfs merge=lfs
+# Using Git LFS
+# Add diff=lfs merge=lfs to the binary files
+
+
+#####################
+# FILE CONFIG
+#
+#   Handle line endings automatically for files detected as
+#   text and leave all files detected as binary untouched.
+#   This will handle all files NOT defined below.
+#   Reference: https://www.davidlaing.com/2012/09/19/customise-your-gitattributes-to-become-a-git-ninja/
+#####################
+
+
+# Auto detect
+*                 		text=auto
+
+
+# Scripts #
+###########
+*.cs 					text diff=csharp eol=lf
+*.py					text diff=python
+*.rb					text diff=ruby
+*.sh					text eol=lf
+*.json					text
+*.htm					text diff=html
+*.html					text diff=html
+*.css					text
+*.bash					text eol=lf
+*.fish					text eol=lf
+*.sh					text eol=lf
+# These are explicitly windows files and should use crlf
+*.bat					text eol=crlf
+*.cmd					text eol=crlf
+*.ps1					text eol=crlf
+
+
+# Unreal Engine #
+#################
+*.uasset 				binary filter=lfs diff=lfs merge=lfs
+*.umap 					binary filter=lfs diff=lfs merge=lfs
+
+
+# Unity YAML #
+##############
+*.shader				text
+*.mat					unityyaml
+*.anim					unityyaml
+*.unity					unityyaml
+*.prefab				unityyaml
+*.asset					unityyaml
+*.meta					unityyaml
+*.controller			unityyaml
+# Unity LFS
+*.cubemap				binary
+*.unitypackage			binary
+# Collapse Unity-generated files on GitHub
+*.asset					linguist-generated
+*.mat					linguist-generated
+*.meta					linguist-generated
+*.prefab				linguist-generated
+*.unity					linguist-generated
+
+
+# 3D Models #
+#############
+*.3dm					binary 
+*.3ds					binary
+*.blend					binary
+*.c4d					binary
+*.collada				binary
+*.dae					binary
+*.dxf					binary
+*.FBX					binary
+*.fbx					binary
+*.jas					binary
+*.lws					binary
+*.lxo					binary
+*.ma					binary
+*.max					binary
+*.mb					binary
+*.obj					binary
+*.ply					binary
+*.skp					binary
+*.stl					binary
+*.ztl					binary
+*.blend					binary
+*.ssp					binary filter=lfs diff=lfs merge=lfs
+*.sbs					text
+
+
+# Audio #
+#########
+*.aif					binary filter=lfs diff=lfs merge=lfs
+*.aiff					binary filter=lfs diff=lfs merge=lfs
+*.it					binary filter=lfs diff=lfs merge=lfs
+*.mod					binary filter=lfs diff=lfs merge=lfs
+*.mp3					binary filter=lfs diff=lfs merge=lfs
+*.ogg					binary filter=lfs diff=lfs merge=lfs
+*.s3m					binary filter=lfs diff=lfs merge=lfs
+*.wav					binary filter=lfs diff=lfs merge=lfs
+*.xm					binary filter=lfs diff=lfs merge=lfs
+
+
+# Video #
+#########
+*.3gpp					binary filter=lfs diff=lfs merge=lfs
+*.3gp					binary filter=lfs diff=lfs merge=lfs
+*.as					binary filter=lfs diff=lfs merge=lfs
+*.asf					binary filter=lfs diff=lfs merge=lfs
+*.avi					binary filter=lfs diff=lfs merge=lfs
+*.fla					binary filter=lfs diff=lfs merge=lfs
+*.flv					binary filter=lfs diff=lfs merge=lfs
+*.m4v					binary filter=lfs diff=lfs merge=lfs
+*.mng					binary filter=lfs diff=lfs merge=lfs
+*.mov					binary filter=lfs diff=lfs merge=lfs
+*.mp4 					binary filter=lfs diff=lfs merge=lfs
+*.mpeg					binary filter=lfs diff=lfs merge=lfs
+*.mpg					binary filter=lfs diff=lfs merge=lfs
+*.ogv					binary filter=lfs diff=lfs merge=lfs
+*.swc					binary filter=lfs diff=lfs merge=lfs
+*.swf					binary filter=lfs diff=lfs merge=lfs
+*.wmv					binary filter=lfs diff=lfs merge=lfs
+*.webm					binary filter=lfs diff=lfs merge=lfs
+
+
+# Graphics #
+############
+*.ai					binary
+*.bmp					binary
+*.dds					binary
+*.eps					binary
+*.exr					binary filter=lfs diff=lfs merge=lfs
+*.gif					binary
+*.gifv					binary
+*.hdr					binary
+*.ico					binary
+*.jng					binary
+*.jp2					binary
+*.jpg					binary
+*.jpeg					binary
+*.jpx					binary
+*.jxr					binary
+*.pdf					binary
+*.png					binary
+*.psb					binary filter=lfs diff=lfs merge=lfs
+*.psd					binary filter=lfs diff=lfs merge=lfs
+# SVG treated as an asset (binary) by default.
+*.svg					text
+# If you want to treat it as binary,
+# use the following line instead.
+# *.svg					binary
+*.svgz					binary
+*.tga					binary
+*.tif					binary
+*.tiff					binary
+*.wbmp					binary
+*.webp					binary
+
+
+# Compressed Archives #
+#######################
+*.7z					binary filter=lfs diff=lfs merge=lfs
+*.bz2					binary filter=lfs diff=lfs merge=lfs
+*.gz					binary filter=lfs diff=lfs merge=lfs
+*.rar					binary filter=lfs diff=lfs merge=lfs
+*.tar					binary filter=lfs diff=lfs merge=lfs
+*.zip					binary filter=lfs diff=lfs merge=lfs
+*.jar					binary filter=lfs diff=lfs merge=lfs
+
+
+# Compiled Dynamic Library #
+############################
+*.dll					binary
+*.pdb					binary
+*.so					binary
+
+
+# Fonts #
+#########
+*.otf					binary
+*.ttf					binary
+*.woff2					binary
+
+
+# Executable/Installer #
+########################
+*.apk					binary
+*.exe					binary
+*.pyc					binary
+
+
+# Documents #
+#############
+*.doc					diff=astextplain
+*.DOC					diff=astextplain
+*.docx					diff=astextplain
+*.DOCX					diff=astextplain
+*.dot					diff=astextplain
+*.DOT					diff=astextplain
+*.pdf					diff=astextplain
+*.PDF					diff=astextplain
+*.rtf					diff=astextplain
+*.RTF					diff=astextplain
+*.md					text
+*.tex					text diff=tex
+*.csv					text
+*.txt					text
+*.sql					text
+
+# Ignore files (like .npmignore or .gitignore)
+*.*ignore				text
+
+# Exclude files from exporting
+#.gitattributes 			export-ignore
+#.gitignore     			export-ignore
+.gitkeep       			export-ignore
